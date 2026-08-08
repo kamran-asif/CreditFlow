@@ -1,0 +1,41 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Webhook Reliability (Target: 99.5%)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "sum(rate(creditflow_webhook_success_total[5m])) / sum(rate(creditflow_webhook_total[5m])) * 100",
+          "legendFormat": "Webhook Success %"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Cached RAG AI Response Time Latency (Target < 120ms)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(creditflow_ai_response_time_seconds_sum[1m]) / rate(creditflow_ai_response_time_seconds_count[1m]) * 1000",
+          "legendFormat": "Latency (ms)"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["creditflow", "bnpl", "payments"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "CreditFlow Platform Overview"
+}
