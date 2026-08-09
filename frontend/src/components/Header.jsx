@@ -33,9 +33,14 @@ export default function Header({ currentUser, onLogout }) {
         {/* Logged in user profile & logout button */}
         {currentUser && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.4rem 0.85rem', borderRadius: '14px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
               <User size={15} style={{ color: 'var(--primary-light)' }} />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>{currentUser.name}</span>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, lineHeight: 1.2 }}>{currentUser.name}</div>
+                {currentUser.authProvider === 'google' && (
+                  <div style={{ fontSize: '0.65rem', color: '#4285F4', fontWeight: 700 }}>Google SSO</div>
+                )}
+              </div>
             </div>
             <button
               onClick={onLogout}
