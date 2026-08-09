@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, ShieldCheck, Bot, Cpu, Activity } from 'lucide-react';
+import LoginPage from './components/LoginPage';
 import Header from './components/Header';
 import BnplSection from './components/BnplSection';
 import PaymentSection from './components/PaymentSection';
@@ -8,6 +9,7 @@ import SimulatorSection from './components/SimulatorSection';
 import MetricsSection from './components/MetricsSection';
 
 export default function App() {
+  const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('bnpl');
   const [activeLoans, setActiveLoans] = useState([]);
   const [selectedLoan, setSelectedLoan] = useState(null);
@@ -27,8 +29,10 @@ export default function App() {
   });
 
   useEffect(() => {
-    fetchLoans();
-  }, []);
+    if (currentUser) {
+      fetchLoans();
+    }
+  }, [currentUser]);
 
   const fetchLoans = async () => {
     try {
@@ -52,6 +56,19 @@ export default function App() {
     };
     setActiveLoans([mockLoan]);
     setSelectedLoan(mockLoan);
+  };
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    if (user.role === 'admin') {
+      setActiveTab('metrics');
+    } else {
+      setActiveTab('bnpl');
+    }
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
   };
 
   const handleApplyLoan = async (amount, tenure) => {
@@ -132,9 +149,14 @@ export default function App() {
     { id: 'metrics', label: 'Telemetry & Monitoring', icon: Activity },
   ];
 
+  // If user is not logged in, show LoginPage
+  if (!currentUser) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem 1.5rem' }}>
-      <Header />
+      <Header currentUser={currentUser} onLogout={handleLogout} />
 
       {/* Navigation Tabs */}
       <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '2.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.85rem', overflowX: 'auto' }}>

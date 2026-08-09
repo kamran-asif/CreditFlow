@@ -1,9 +1,9 @@
 import React from 'react';
-import { Zap, Clock, Layers, ShieldCheck, Server } from 'lucide-react';
+import { Zap, Clock, Layers, ShieldCheck, Server, LogOut, User } from 'lucide-react';
 
-export default function Header() {
+export default function Header({ currentUser, onLogout }) {
   return (
-    <header style={{ marginBottom: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
+    <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.25rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <div style={{ padding: '0.75rem', borderRadius: '16px', background: 'var(--primary-gradient)', display: 'flex', boxShadow: '0 0 25px rgba(99, 102, 241, 0.5)' }}>
           <Zap style={{ color: '#fff' }} size={28} />
@@ -29,12 +29,24 @@ export default function Header() {
         <div className="badge-pill badge-indigo">
           <Clock size={13} /> RAG &lt; 120ms
         </div>
-        <div className="badge-pill badge-amber">
-          <Layers size={13} /> Kafka 10K+ Load
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.35rem 0.85rem', borderRadius: '9999px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-          <Server size={13} style={{ color: 'var(--success)' }} /> Node Active
-        </div>
+
+        {/* Logged in user profile & logout button */}
+        {currentUser && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.4rem 0.85rem', borderRadius: '14px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <User size={15} style={{ color: 'var(--primary-light)' }} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>{currentUser.name}</span>
+            </div>
+            <button
+              onClick={onLogout}
+              className="btn-secondary"
+              style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', borderRadius: '8px' }}
+              title="Sign Out"
+            >
+              <LogOut size={13} /> Logout
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
