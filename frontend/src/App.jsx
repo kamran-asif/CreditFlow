@@ -13,7 +13,7 @@ export default function App() {
   const [selectedLoan, setSelectedLoan] = useState(null);
   const [paymentLogs, setPaymentLogs] = useState([]);
   const [chatMessages, setChatMessages] = useState([
-    { sender: 'ai', text: 'Hello! Ask me about BNPL terms, foreclosures, or fees.', cached: true, latency: 12 }
+    { sender: 'ai', text: 'Hello! I am your CreditFlow AI Assistant. Ask me about BNPL loan terms, foreclosure fees, or grace periods!', cached: true, latency: 12 }
   ]);
   const [isAskingAi, setIsAskingAi] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
@@ -92,7 +92,7 @@ export default function App() {
     setIsAskingAi(true);
     let answer = "Foreclosure Policy: Borrowers can foreclose BNPL loans after 1 EMI with 0% penalties.";
     if (query.toLowerCase().includes('grace') || query.toLowerCase().includes('late')) {
-      answer = "Grace Period & Penalties: A 3-day grace period applies after due date with 0 late fees.";
+      answer = "Grace Period & Penalties: A 3-day grace period applies after due date with 0 late fees during grace period.";
     }
 
     try {
@@ -121,14 +121,14 @@ export default function App() {
         clearInterval(interval);
         setIsSimulating(false);
       }
-    }, 300);
+    }, 250);
   };
 
   const tabs = [
     { id: 'bnpl', label: 'BNPL Loans', icon: CreditCard },
     { id: 'payment', label: 'Razorpay & Idempotency', icon: ShieldCheck },
     { id: 'ai', label: 'RAG AI Assistant', icon: Bot },
-    { id: 'simulator', label: '10K Event Simulator', icon: Cpu },
+    { id: 'simulator', label: '10K Load Simulator', icon: Cpu },
     { id: 'metrics', label: 'Telemetry & Monitoring', icon: Activity },
   ];
 
@@ -136,12 +136,19 @@ export default function App() {
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem 1.5rem' }}>
       <Header />
 
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', overflowX: 'auto' }}>
+      {/* Navigation Tabs */}
+      <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '2.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.85rem', overflowX: 'auto' }}>
         {tabs.map(tab => {
           const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
           return (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={activeTab === tab.id ? 'btn-gradient' : 'btn-secondary'} style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
-              <Icon size={16} /> {tab.label}
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={isActive ? 'btn-primary' : 'btn-secondary'}
+              style={{ padding: '0.65rem 1.25rem', whiteSpace: 'nowrap' }}
+            >
+              <Icon size={17} /> {tab.label}
             </button>
           );
         })}
