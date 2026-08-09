@@ -107,9 +107,26 @@ export default function App() {
   const handleSendQuery = async (query) => {
     setChatMessages(prev => [...prev, { sender: 'user', text: query }]);
     setIsAskingAi(true);
-    let answer = "Foreclosure Policy: Borrowers can foreclose BNPL loans after 1 EMI with 0% penalties.";
-    if (query.toLowerCase().includes('grace') || query.toLowerCase().includes('late')) {
-      answer = "Grace Period & Penalties: A 3-day grace period applies after due date with 0 late fees during grace period.";
+
+    const q = query.toLowerCase().trim();
+    let answer = "CreditFlow Assistant: You can ask me about applying for BNPL loans, 0% foreclosure fees, 3, 6, 12-month EMI rates, Razorpay idempotency, or grace periods!";
+
+    if (q.match(/(hi|hello|hey|greetings|good morning|who are you|name)/)) {
+      answer = "Hello! 👋 I am your CreditFlow AI Assistant. I can help you apply for BNPL loans, calculate EMIs, explain foreclosure rules (0% fee), or check Razorpay payment security. What can I do for you today?";
+    } else if (q.match(/(what can i do|help|feature|option|capability|do for me|what to do)/)) {
+      answer = "Here is what you can do on CreditFlow:\n1. 💳 Apply for BNPL Credit Line (up to ₹1,00,000 credit).\n2. 📅 Repay in 3, 6, or 12-month EMI installments.\n3. ⚡ Test Idempotent Razorpay Payments (zero duplicate charges).\n4. 🤖 Ask AI support about foreclosure & grace periods.\n5. 📊 Monitor 99.5% webhook reliability & telemetry.";
+    } else if (q.match(/(apply|how to apply|get loan|borrow|disburse|process|start)/)) {
+      answer = "To apply for a BNPL loan:\n1. Go to the 'BNPL Loans' tab.\n2. Select your purchase amount (₹2,000 to ₹50,000).\n3. Choose your repayment tenure (3, 6, or 12 months).\n4. Click 'Disburse Credit Line' for instant 1-click approval!";
+    } else if (q.match(/(foreclos|prepay|close loan)/)) {
+      answer = "CreditFlow Foreclosure Policy: Borrowers can foreclose their BNPL loan anytime after completing 1 EMI installment with 0% foreclosure fee penalties!";
+    } else if (q.match(/(emi|interest|rate|apr|monthly)/)) {
+      answer = "CreditFlow EMI Terms: Flexible tenures of 3, 6, or 12 months with a transparent 12% APR fixed interest rate and zero hidden charges.";
+    } else if (q.match(/(late|grace|penalty|overdue|due date)/)) {
+      answer = "Grace Period & Penalty Policy: A 3-day grace period applies after your monthly EMI due date. Zero late fees are charged during the grace period.";
+    } else if (q.match(/(razorpay|payment|security|idempotent|duplicate|lock)/)) {
+      answer = "Payment Security: Payments are processed via Razorpay with 256-bit encryption. Our Idempotent APIs (X-Idempotency-Key) with Redis distributed locks guarantee you are never charged twice even during network drops.";
+    } else if (q.match(/(limit|score|cibil|credit line|increase)/)) {
+      answer = "Credit Limit Policy: Initial credit lines up to ₹1,00,000 are allocated based on credit score (750+). Paying your monthly EMIs on time automatically raises your available credit limit!";
     }
 
     try {
@@ -119,7 +136,7 @@ export default function App() {
       });
       if (res.ok) {
         const data = await res.json();
-        answer = data.answer;
+        if (data.answer) answer = data.answer;
       }
     } catch (e) {}
 

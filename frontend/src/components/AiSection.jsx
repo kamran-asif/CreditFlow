@@ -32,7 +32,7 @@ export default function AiSection({ chatMessages, onSendQuery, isAskingAi }) {
 
       {/* Quick Suggested Chips */}
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-        {['Foreclosure policy', 'EMI Interest terms', 'Grace period & late fees', 'Razorpay security'].map(chip => (
+        {['What can I do?', 'How to apply?', 'Foreclosure policy', 'EMI Interest terms', 'Grace period'].map(chip => (
           <button
             key={chip}
             onClick={() => handleSend(chip)}
@@ -60,14 +60,15 @@ export default function AiSection({ chatMessages, onSendQuery, isAskingAi }) {
         {chatMessages.map((msg, idx) => (
           <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}>
             <div style={{
-              maxWidth: '82%',
+              maxWidth: '85%',
               padding: '0.9rem 1.25rem',
               borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
               background: msg.sender === 'user' ? 'var(--primary-gradient)' : 'rgba(255, 255, 255, 0.05)',
               border: msg.sender === 'user' ? 'none' : '1px solid var(--border-subtle)',
               color: '#fff',
               fontSize: '0.925rem',
-              lineHeight: '1.5'
+              lineHeight: '1.5',
+              whiteSpace: 'pre-line'
             }}>
               {msg.text}
             </div>
@@ -75,7 +76,7 @@ export default function AiSection({ chatMessages, onSendQuery, isAskingAi }) {
               <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.35rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 <span>Latency: <strong style={{ color: 'var(--success)' }}>{msg.latency || 18} ms</strong></span>
                 <span>•</span>
-                <span>Source: {msg.cached ? 'Redis Cache' : 'RAG Engine'}</span>
+                <span>Source: {msg.cached ? 'Redis Cache' : 'RAG Intent Engine'}</span>
               </div>
             )}
           </div>
@@ -91,7 +92,7 @@ export default function AiSection({ chatMessages, onSendQuery, isAskingAi }) {
       <div style={{ display: 'flex', gap: '0.6rem' }}>
         <input
           type="text"
-          placeholder="Ask about BNPL loan terms, foreclosures, fees..."
+          placeholder="Ask anything (e.g., 'hey', 'what can I do?', 'how to apply?')..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
